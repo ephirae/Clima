@@ -28,8 +28,8 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Future.delayed(const Duration(seconds: 5))
       ]);
 
-      if (weatherData == null) {
-        Navigator.push(
+      if (weatherData == null)  {
+        String received = await Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) {
@@ -37,6 +37,9 @@ class _LoadingScreenState extends State<LoadingScreen> {
             },
           ),
         );
+        if (received == "getLocation"){
+          getLocationData();
+        }
       } else {
         Navigator.push(
           context,
