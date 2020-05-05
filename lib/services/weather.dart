@@ -86,4 +86,24 @@ class WeatherModel {
       return 'Bring a 🧥 just in case';
     }
   }
+
+  AssetImage getImage(int condition) {
+    if (condition < 300) {
+      return AssetImage('images/thunderstorm.jpg');
+    } else if (condition < 400) {
+      return AssetImage('images/drizzle.jpg');
+    } else if (condition < 600) {
+      return AssetImage('images/rain.jpg');
+    } else if (condition < 700) {
+      return AssetImage('images/snow.jpg');
+    } else if (condition < 800) {
+      return AssetImage('images/fog.jpg');
+    } else if (condition == 800) {
+      return AssetImage('images/clear.jpg');
+    } else if (condition <= 804) {
+      return AssetImage('images/cloudy.jpg');
+    } else {
+      return AssetImage('images/location_background.jpg');
+    }
+  }
 }
