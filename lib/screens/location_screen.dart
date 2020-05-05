@@ -27,24 +27,13 @@ class _LocationScreenState extends State<LocationScreen> {
   void updateUI(dynamic weatherData) {
     setState(
       () {
-//        if (weatherData == null) {
-//          Navigator.push(
-//            context,
-//            MaterialPageRoute(
-//              builder: (context) {
-//                return CityScreen();
-//              },
-//            ),
-//          );
-//        } else {
-          double temperature = weatherData['main']['temp'];
-          temp = temperature.toInt();
-          var weatherID = weatherData['weather'][0]['id'];
-          weatherIcon = weather.getWeatherIcon(weatherID);
+        double temperature = weatherData['main']['temp'];
+        temp = temperature.toInt();
+        var weatherID = weatherData['weather'][0]['id'];
+        weatherIcon = weather.getWeatherIcon(weatherID);
 
-          weatherMessage = weather.getMessage(temp);
-          cityName = weatherData['name'];
-        //}
+        weatherMessage = weather.getMessage(temp);
+        cityName = weatherData['name'];
       },
     );
   }
@@ -81,8 +70,8 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   FlatButton(
-                    onPressed: () {
-                      Navigator.push(
+                    onPressed: () async {
+                      var typedName = await Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) {
@@ -90,6 +79,9 @@ class _LocationScreenState extends State<LocationScreen> {
                           },
                         ),
                       );
+//                      if (typedName != null) {
+//                        checkCityName(typedName);
+//                      }
                     },
                     child: Icon(
                       Icons.location_city,

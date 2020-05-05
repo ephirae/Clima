@@ -22,31 +22,35 @@ class _LoadingScreenState extends State<LoadingScreen> {
     WeatherModel weatherModel = WeatherModel();
 
     //handle timeout
-    var weatherData = await Future.any([
-      weatherModel.getLocationWeather(),
-      Future.delayed(const Duration(seconds: 5))
-    ]);
+    try {
+      var weatherData = await Future.any([
+        weatherModel.getLocationWeather(),
+        Future.delayed(const Duration(seconds: 5))
+      ]);
 
-    if (weatherData == null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return CityScreen();
-          },
-        ),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return LocationScreen(
-              locationWeather: weatherData,
-            );
-          },
-        ),
-      );
+      if (weatherData == null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return CityScreen();
+            },
+          ),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return LocationScreen(
+                locationWeather: weatherData,
+              );
+            },
+          ),
+        );
+      }
+    } catch (SocketException) {
+
     }
   }
 

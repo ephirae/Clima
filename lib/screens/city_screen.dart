@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:clima/utilities/constants.dart';
+import 'package:clima/services/weather.dart';
+import 'location_screen.dart';
 
 class CityScreen extends StatefulWidget {
   @override
@@ -7,6 +11,39 @@ class CityScreen extends StatefulWidget {
 }
 
 class _CityScreenState extends State<CityScreen> {
+  String cityName;
+  var weatherData;
+
+  WeatherModel weather = WeatherModel();
+
+  Future<bool> checkCityName(var cityName) async {
+    weatherData = await Future.any([
+      weather.getCityWeather(cityName, context),
+      Future.delayed(const Duration(seconds: 5))
+    ]);
+    if (weatherData == null && weatherData != SocketException('error')) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: new Text("Invalid city name. Check your spelling?"),
+            actions: <Widget>[
+              new FlatButton(
+                child: new Text("TRY AGAIN"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,10 +70,29 @@ class _CityScreenState extends State<CityScreen> {
               ),
               Container(
                 padding: EdgeInsets.all(20.0),
-                child: null,
+                child: TextField(
+                  style: TextStyle(color: Colors.black),
+                  decoration: kTextFieldDecoration,
+                  onChanged: (value) {
+                    cityName = value;
+                  },
+                ),
               ),
               FlatButton(
-                onPressed: () {},
+                onPressed: () async {
+                  if (await checkCityName(cityName)) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return LocationScreen(
+                            locationWeather: weatherData,
+                          );
+                        },
+                      ),
+                    );
+                  }
+                },
                 child: Text(
                   'Get Weather',
                   style: kButtonTextStyle,

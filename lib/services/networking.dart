@@ -7,14 +7,20 @@ class NetworkHelper {
   final String url;
 
   Future getData() async {
-    http.Response response = await http.get(url);
+    try {
+      http.Response response = await http.get(url);
 
-    if (response.statusCode == 200) {
-      String data = response.body;
+      if (response.statusCode == 200) {
+        String data = response.body;
 
-      return jsonDecode(data);
-    } else {
-      print(response.statusCode);
+        return jsonDecode(data);
+      } else {
+        print(response.statusCode);
+      }
+    }
+    catch (SocketException) {
+      print("no internet connection");
+      throw SocketException;
     }
   }
 }
