@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:clima/services/weather.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'city_screen.dart';
-
+import 'package:clima/utilities/constants.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -18,7 +18,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
   }
 
   void getLocationData() async {
-
     WeatherModel weatherModel = WeatherModel();
 
     //handle timeout
@@ -28,7 +27,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         Future.delayed(const Duration(seconds: 5))
       ]);
 
-      if (weatherData == null)  {
+      if (weatherData == null) {
         String received = await Navigator.push(
           context,
           MaterialPageRoute(
@@ -37,7 +36,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
             },
           ),
         );
-        if (received == "getLocation"){
+        if (received == "getLocation") {
           getLocationData();
         }
       } else {
@@ -52,19 +51,28 @@ class _LoadingScreenState extends State<LoadingScreen> {
           ),
         );
       }
-    } catch (SocketException) {
-
-    }
+    } catch (SocketException) {}
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: SpinKitPulse(
-        color: Colors.white,
-        size: 100,
-      )),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(
+              "Retrieving location...",
+              style: kMessageTextStyle,
+              textAlign: TextAlign.center,
+            ),
+            SpinKitPulse(
+              color: Colors.white,
+              size: 100,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
